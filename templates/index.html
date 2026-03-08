@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ portfolio.profile.name }} | Portfólio</title>
+    <meta name="description" content="Portfólio minimalista futurista com projetos do GitHub de {{ portfolio.profile.name }}.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="page-shell"></div>
+
+    <main class="layout">
+        <section class="hero-panel">
+            <div class="hero-copy">
+                <span class="eyebrow">Portfólio em tempo real</span>
+                <h1>{{ portfolio.profile.name }}</h1>
+                <p class="lead">{{ portfolio.profile.bio }}</p>
+                <p class="summary">{{ portfolio.profile.summary }}</p>
+
+                <div class="hero-actions">
+                    <a href="{{ portfolio.profile.github_url }}" target="_blank" rel="noreferrer">Ver GitHub</a>
+                    <a class="ghost" href="{{ portfolio.all_projects_url }}" target="_blank" rel="noreferrer">Todos os projetos</a>
+                </div>
+
+                <ul class="signal-list">
+                    <li>
+                        <span>Local</span>
+                        <strong>{{ portfolio.profile.location }}</strong>
+                    </li>
+                    <li>
+                        <span>Usuário</span>
+                        <strong>@{{ portfolio.profile.username }}</strong>
+                    </li>
+                    <li>
+                        <span>Seguidores</span>
+                        <strong>{{ portfolio.profile.followers }}</strong>
+                    </li>
+                </ul>
+            </div>
+
+            <aside class="hero-card">
+                <div class="avatar-ring">
+                    <img src="{{ portfolio.profile.avatar_url }}" alt="Foto de {{ portfolio.profile.name }}">
+                </div>
+
+                <div class="profile-metrics">
+                    <article>
+                        <span>Projetos</span>
+                        <strong>{{ portfolio.stats.projects }}</strong>
+                    </article>
+                    <article>
+                        <span>Stars</span>
+                        <strong>{{ portfolio.stats.stars }}</strong>
+                    </article>
+                    <article>
+                        <span>Forks</span>
+                        <strong>{{ portfolio.stats.forks }}</strong>
+                    </article>
+                    <article>
+                        <span>Seguindo</span>
+                        <strong>{{ portfolio.profile.following }}</strong>
+                    </article>
+                </div>
+
+                {% if portfolio.profile.top_languages %}
+                <div class="stack-box">
+                    <span class="stack-title">Stack em destaque</span>
+                    <div class="chip-row">
+                        {% for language in portfolio.profile.top_languages %}
+                        <span class="chip">{{ language }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </aside>
+        </section>
+
+        {% if portfolio.has_error %}
+        <section class="notice">
+            <p>Os dados ao vivo do GitHub estão indisponíveis no momento. Exibindo uma versão de contingência.</p>
+        </section>
+        {% endif %}
+
+        <section class="stats-grid">
+            <article>
+                <span>Projetos públicos</span>
+                <strong>{{ portfolio.profile.public_repos }}</strong>
+            </article>
+            <article>
+                <span>Seguidores</span>
+                <strong>{{ portfolio.profile.followers }}</strong>
+            </article>
+            <article>
+                <span>Forks totais</span>
+                <strong>{{ portfolio.stats.forks }}</strong>
+            </article>
+            <article>
+                <span>Perfil</span>
+                <strong>GitHub Live</strong>
+            </article>
+        </section>
+
+        <section class="projects-section">
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">Projetos selecionados</span>
+                    <h2>Vitrine principal</h2>
+                </div>
+                {% if portfolio.profile.blog %}
+                <a class="inline-link" href="{{ portfolio.profile.blog }}" target="_blank" rel="noreferrer">Site pessoal</a>
+                {% endif %}
+            </div>
+
+            <div class="projects-grid">
+                {% for project in portfolio.projects %}
+                <article class="project-card">
+                    <div class="project-topline">
+                        <span class="project-language">{{ project.language }}</span>
+                        <span class="project-date">{{ project.updated_at }}</span>
+                    </div>
+
+                    <h3>{{ project.name }}</h3>
+                    <p>{{ project.description }}</p>
+
+                    <div class="project-stats">
+                        <span>★ {{ project.stars }}</span>
+                        <span>⑂ {{ project.forks }}</span>
+                    </div>
+
+                    <div class="project-actions">
+                        <a href="{{ project.url }}" target="_blank" rel="noreferrer">Repositório</a>
+                        {% if project.homepage %}
+                        <a class="ghost" href="{{ project.homepage }}" target="_blank" rel="noreferrer">Demo</a>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>
